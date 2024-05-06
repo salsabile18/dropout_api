@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prédiction de décrochage scolaire</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f2f2f2; /* Couleur de l'arrière-plan */
+            font-family: Arial, sans-serif; /* Police par défaut */
+        }
+
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+        }
+
+        .frame {
+            background-color: #ffffff; /* Couleur de fond du cadre */
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 400px; /* Largeur maximale du cadre */
+            width: 100%; /* Remplir l'espace disponible */
+        }
+
+        .login {
+            text-align: center; /* Centrage horizontal */
+        }
+
+        .login h1 {
+            font-family: "Arial", sans-serif;
+            font-style: italic;
+            color: #333333; /* Couleur de l'écriture du titre */
+            font-size: 1.5em;
+            margin-bottom: 20px;
+        }
+
+        /* Styles pour les cases de saisie */
+        input[type="text"], select {
+            border: 2px solid #849dcc; /* Couleur de la bordure */
+            border-radius: 22px; /* Bordure arrondie */
+            height: 40px; /* Hauteur */
+            width: calc(100% - 36px); /* Largeur ajustée */
+            padding: 0 18px; /* Espacement intérieur */
+            margin: 10px auto; /* Marge */
+            box-sizing: border-box; /* La taille de la boîte comprend le remplissage et la bordure */
+            outline: none; /* Pas de contour */
+        }
+
+        input[type="text"]:focus, select:focus {
+            border-color: #6c7f9d; /* Couleur de la bordure lorsqu'en focus */
+        }
+
+        .button {
+            background-color: #849dcc; /* Couleur du bouton */
+            color: #ffffff; /* Couleur du texte du bouton */
+            width: 100%;
+            cursor: pointer;
+            border: none;
+            border-radius: 22px;
+            height: 40px;
+            margin-top: 20px;
+            font-size: 1em;
+        }
+
+        .button:hover {
+            background-color: #6c7f9d; /* Couleur du bouton au survol */
+        }
+
+        .logo {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <img class="logo" src="static/images/myimg.png" alt="Logo de votre société">
+    <div class="container">
+        <div class="frame">
+            <div class="login">
+                <h1>Prédiction de décrochage scolaire</h1>
+                <form id="dropout-form" action="/login/" method="post">
+                    <input type="text" name="typeEnseignement" placeholder="type Enseignement" required="required">
+                    <input type="text" name="NbrRedoublement" placeholder="Nombre de Redoublement" required="required">
+                    <input type="text" name="MoyenneNotes" placeholder="Note Moyenne" required="required">
+                    <input type="text" name="Age" placeholder="Age" required="required">
+
+
+
+                                        <!-- Dropdown pour gendre_label -->
+                    <select name="id_Genre" required="required">
+                        <option value="" disabled selected>Gendre</option>
+                        {% for key, value in gendre_label.items() %}
+                            <option value="{{ key }}">{{ value }}</option>
+                        {% endfor %}
+                    </select>
+
+                    <!-- Dropdown pour CD_REG -->
+                    <select name="CD_REG" required="required">
+                        <option value="" disabled selected>Région</option>
+                        {% for key, value in cd_reg_labels.items() %}
+                            <option value="{{ key }}">{{ value }}</option>
+                        {% endfor %}
+                    </select>
+
+                    <!-- Dropdown pour cd_com -->
+                    <select name="cd_com" required="required">
+                        <option value="" disabled selected>Commune</option>
+                        {% for key, value in cd_com_labels.items() %}
+                            <option value="{{ key }}">{{ value }}</option>
+                        {% endfor %}
+                    </select>
+
+                    <!-- Dropdown pour CD_MIL -->
+                    <select name="CD_MIL" required="required">
+                        <option value="" disabled selected>Milieu</option>
+                        {% for key, value in cd_mil_labels.items() %}
+                            <option value="{{ key }}">{{ value }}</option>
+                        {% endfor %}
+                    </select>
+
+                    <!-- Dropdown pour suffix_index -->
+                    <select name="suffix_index" required="required">
+                        <option value="" disabled selected>Suffix</option>
+                        {% for key, value in suffix_index_labels.items() %}
+                            <option value="{{ key }}">{{ value }}</option>
+                        {% endfor %}
+                    </select>
+
+                    <button type="submit" class="button"><strong>Prédire</strong></button>
+                </form>
+                <div id="prediction-result"></div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prédiction de decrochage scolaire</title>
+    <style>
+      body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f9f9f9;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    max-width: 800px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    color: #333333;
+    text-align: center;
+    margin-bottom: 40px;
+    font-size: 32px;
+}
+
+form {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+input[type="file"] {
+    margin-right: 10px;
+    padding: 12px;
+    border: 2px solid #007bff;
+    border-radius: 5px;
+    font-size: 16px;
+    transition: border-color 0.3s ease; /* Transition pour un effet de survol */
+}
+
+input[type="file"]:hover {
+    border-color: #0056b3; /* Changement de couleur au survol */
+}
+
+button[type="submit"] {
+    background-color: #007bff;
+    color: #ffffff;
+    border: none;
+    padding: 14px 28px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 16px;
+    transition: background-color 0.3s ease; /* Transition pour un effet de survol */
+}
+
+button[type="submit"]:hover {
+    background-color: #0056b3;
+}
+
+#results {
+    margin-top: 30px;
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+table, th, td {
+    border: 1px solid #dddddd;
+}
+
+th, td {
+    padding: 12px;
+    text-align: left;
+}
+
+th {
+    background-color: #007bff;
+    color: #ffffff;
+}
+
+    </style>
+</head>
+<body>
+    <h1>Prédiction de decrochage scoalire</h1>
+    <form id="upload-form" enctype="multipart/form-data">
+        <input type="file" id="file-input" name="file" accept=".csv">
+        <button type="submit">Importez le fichier</button>
+    </form>
+    <div id="results"></div>
+
+     <!--<script src="frontend.js"></script>-->
+    <script src="{{ url_for('static', filename='frontend.js') }}"></script>
+    <div id="results"></div>
+
+
+
+</body>
+</html>
