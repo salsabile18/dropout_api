@@ -33,15 +33,13 @@ jobs:
       # Optional: Add step to run tests here (PyTest, Django test suites, etc.)
 
       - name: Zip artifact for deployment
-        run: zip release.zip ./* -r
+        run: zip -r release.zip try/*
 
       - name: Upload artifact for deployment jobs
         uses: actions/upload-artifact@v3
         with:
           name: python-app
-          path: |
-            release.zip
-            !venv/
+          path: release.zip
 
   deploy:
     runs-on: ubuntu-latest
@@ -60,8 +58,12 @@ jobs:
 
       - name: Unzip artifact for deployment
         run: unzip release.zip
-
       
+      - name: Set startup command
+        run: |
+          echo "startupCommand: 'uvicorn try.main:app --host 0.0.0.0 --port \$PORT'" > .deployment
+
+
       - name: Login to Azure
         uses: azure/login@v1
         with:
@@ -75,4 +77,3 @@ jobs:
         with:
           app-name: 'dropout-student'
           slot-name: 'Production'
-          
