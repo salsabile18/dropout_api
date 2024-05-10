@@ -18,10 +18,22 @@ predictions_classes = {0: "Non-Décrocheur", 1: "Décrocheur"}
 def load_labels():
     # Chargez votre ensemble de données ici, puis créez des dictionnaires de correspondance
     # entre les valeurs numériques et les libellés pour chaque champ nécessaire
-    cd_reg_labels = {0: "Services Centraux", 1: "Services Centraux", 2: "Services Centraux", 3: "Services Centraux",
-                     4: "Services Centraux", 5: "Services Centraux", 6: "Services Centraux", 7: "Services Centraux",
-                     8: "Services Centraux", 9: "Services Centraux", 10: "Services Centraux", 11: "Services Centraux",
-                     12: "Services Centraux"}  # Ajoutez toutes les correspondances nécessaires
+    cd_reg_labels = {
+        0: "Services Centraux",
+        1: "Tanger-Tetouan-Al Hoceima",
+        2: "Oriental",
+        3: "Fès-Meknès",
+        4: "Rabat-Salé-Kénitra",
+        5: "Béni Mellal-Khénifra",
+        6: "Casablanca-Settat",
+        7: "Marrakech-Safi",
+        8: "Drâa-Tafilalet",
+        9: "Souss-Massa",
+        10: "Guelmim-Oued Noun",
+        11: "Laayoune-Sakia El Hamra",
+        12: "Eddakhla-Oued Eddahab",
+    }
+    # Ajoutez toutes les correspondances nécessaires
     cd_com_labels = {
         101: "Directions Centrales",
         10101: "Agadir (Mun.)",
@@ -1601,7 +1613,7 @@ def load_labels():
     return cd_reg_labels, cd_com_labels, cd_mil_labels, suffix_index_labels, gendre_label
 
 
-@app.get("/fastapi")
+@app.get("/fastapi",response_class=HTMLResponse)
 async def home(request: Request):
     cd_reg_labels, cd_com_labels, cd_mil_labels, suffix_index_labels, gendre_label = load_labels()
     return templates.TemplateResponse("app.html", {"request": request, "cd_reg_labels": cd_reg_labels,
@@ -1635,9 +1647,9 @@ def determine_comment(prediction_proba):
 def determine_comment(prediction_proba):
     if prediction_proba < 10:
         return "Faible"
-    elif 10 <= prediction_proba <= 20:
+    elif 10 <= prediction_proba <= 30:
         return "Modéré"
-    elif 30 <= prediction_proba <= 50:
+    elif 30 < prediction_proba < 50:
         return "Élevé"
     else:
         return "Très élevé"

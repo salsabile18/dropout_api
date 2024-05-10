@@ -9,7 +9,12 @@ document.addEventListener('DOMContentLoaded', function() {
             method: 'POST',
             body: formData
         })
-        .then(response => response.json())
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Erreur lors de la requête Fetch');
+            }
+            return response.json();
+        })
         .then(data => {
             displayResults(data);
         })
@@ -20,29 +25,27 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function displayResults(data) {
-    let resultsDiv = document.getElementById('results');
+    let resultsDiv = document.getElementById('results-prediction');
     resultsDiv.innerHTML = '<h2>Résultats de la prédiction</h2>';
 
     let table = '<table><tr><th>ID</th><th>Prédiction</th><th>Probabilité</th><th>Commentaire</th></tr>';
     data.forEach((prediction, index) => {
         let id = index + 1; // Commencer l'ID à partir de 1
         let comment;
-        if (prediction.probability >= 0 && prediction.probability < 0.10) {
+        let probability = prediction.probability; // Définir la variable probability
+        if (probability >= 0 && probability < 0.10) {
             comment = 'Null';
-        } else if (prediction.probability >= 0.10 && prediction.probability < 0.40) {
+        } else if (probability >= 0.10 && probability < 0.40) {
             comment = 'Faible';
-        } else if (prediction.probability >= 0.40 && prediction.probability < 0.70) {
+        } else if (probability >= 0.40 && probability < 0.70) {
             comment = 'Probabilité importante de décrochage';
         } else {
             comment = 'Probabilité élevée de décrochage';
         }
-        table += `<tr><td>${id}</td><td>${prediction.prediction}</td><td>${prediction.probability}</td><td>${comment}</td></tr>`;
+        table += `<tr><td>${id}</td><td>${prediction.prediction}</td><td>${probability}</td><td>${comment}</td></tr>`;
     });
     table += '</table>';
 
     resultsDiv.innerHTML += table;
     console.log("Données reçues:", data);
 }
-
-
-

@@ -86,18 +86,101 @@ th {
     </style>
 </head>
 <body>
-    <h1>Prédiction de decrochage scoalire</h1>
+    <img class="logo" src="static/images/myimg.png" alt="Logo de votre société">
+    <h1>Prédiction de décrochage scolaire</h1>
     <form id="upload-form" enctype="multipart/form-data">
         <input type="file" id="file-input" name="file" accept=".csv">
         <button type="submit">Importez le fichier</button>
     </form>
-    <div id="results"></div>
+    <div id="results-prediction"></div> <!-- ID unique pour les résultats de la prédiction -->
 
-     <!--<script src="frontend.js"></script>-->
-    <script src="{{ url_for('static', filename='frontend.js') }}"></script>
-    <div id="results"></div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById('upload-form').addEventListener('submit', function(event) {
+        event.preventDefault(); // Empêcher le formulaire de se soumettre normalement
+
+        let formData = new FormData();
+        formData.append('file', document.getElementById('file-input').files[0]);
+
+        fetch('/predict', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Erreur lors de la requête Fetch');
+            }
+            return response.json();
+        })
+        .then(data => {
+            displayResults(data);
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    });
+});
+
+function displayResults(data) {
+    let resultsDiv = document.getElementById('results-prediction');
+    resultsDiv.innerHTML = '<h2>Résultats de la prédiction</h2>';
+
+    let table = '<table><tr>'; // Commencer la première ligne du tableau
+    // Ajouter les en-têtes de colonne
+    table += '<th>ID</th>';
+    table += '<th>Type Enseignement</th>';
+    table += '<th>Nbr Redoublement</th>';
+    table += '<th>Moyenne Notes</th>';
+    table += '<th>Genre</th>';
+    table += '<th>Age</th>';
+    table += '<th>CD REG</th>';
+    table += '<th>CD COM</th>';
+    table += '<th>CD MIL</th>';
+    table += '<th>Suffix Index</th>';
+    table += '<th>Prédiction</th>';
+    table += '<th>Probabilité</th>';
+    table += '<th>Commentaire</th>';
+    table += '</tr>';
+
+    // Ajouter les lignes avec les valeurs
+    data.forEach((row, index) => {
+        let id = index + 1; // Commencer l'ID à partir de 1
+        let comment;
+        let probability = row.probability; // Définir la variable probability
+        if (probability < 0.10) {
+            comment = 'Faible';
+        } else if (probability >= 0.10 && probability <= 0.30) {
+            comment = 'Modéré';
+        } else if (probability > 30 && probability < 0.50) {
+            comment = 'Élevé';
+        } else {
+            comment = 'Très élevé';
+        }
+        table += '<tr>';
+        table += `<td>${id}</td>`;
+        table += `<td>${row.id_typeEnseignement}</td>`;
+        table += `<td>${row.NbrRedoublement}</td>`;
+        table += `<td>${row.MoyenneNotes}</td>`;
+        table += `<td>${row.id_Genre}</td>`;
+        table += `<td>${row.Age}</td>`;
+        table += `<td>${row.CD_REG}</td>`;
+        table += `<td>${row.cd_com}</td>`;
+        table += `<td>${row.CD_MIL}</td>`;
+        table += `<td>${row.suffix_index}</td>`;
+        table += `<td>${row.prediction}</td>`;
+        table += `<td>${probability}</td>`;
+        table += `<td>${comment}</td>`;
+        table += '</tr>';
+    });
+
+    table += '</table>';
+
+    resultsDiv.innerHTML += table;
+    console.log("Données reçues:", data);
+}
 
 
 
+    </script>
 </body>
 </html>
